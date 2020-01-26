@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
+    <title>Van-Goghizer</title>
+</head>
+<body>
+    <div class="container">
+        <form id="form">
+            <input type="file" id="imgInput" onchange="feedImgObject(event)" />
+            <button id="start">Van-Goghize me!</button>
+        </form> 
+        <img src="" alt="" id="myImage" width="200px" height="200px" />
+        <canvas id="cvs"></canvas>
+    </div>
+    
+    <script src="./app.js"></script>
+</body>
+</html>
