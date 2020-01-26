@@ -9,7 +9,20 @@ startBtn.classList.add("invisible");
 startBtn.addEventListener("click", vanGoghizeMe);
 var animationId;
 var strokes = [];
-var vanGoghPalette = []; //[[r,g,b,a], ...]
+var vanGoghPalette = [	
+    [18,63,119, 1],
+    [15,134,182, 1]
+	[55,202,229, 1],
+	[245,219,55, 1],
+    [251,239,203, 1],
+    [120,144,168, 1],
+    [0,0,0,1],
+    [48,72,120, 1],
+    [24,24,72, 1],
+    [240,168,24],
+
+
+]; //[[r,g,b,a], ...]
 
 cvs.addEventListener("click", handleClick);
 
@@ -47,6 +60,7 @@ function vanGoghizeMe(e){
 }
 
 function approximateColorToPalette(color){
+
 var dif = 256 * 4;
 rightC = [];
 
@@ -54,10 +68,10 @@ vanGoghPalette.forEach(cfp => {
 
     color.forEach(e => {
         thisDif = 0;
-        dif += Math.abs(e - cfp[0]);
-        dif += Math.abs(e - cfp[1]);
-        dif += Math.abs(e - cfp[2]);
-        dif += Math.abs(e - cfp[3]);
+        thisDif += Math.abs(e - cfp[0]);
+        thisDif += Math.abs(e - cfp[1]);
+        thisDif += Math.abs(e - cfp[2]);
+        thisDif += Math.abs(e - cfp[3]);
 
         if(thisDif < dif){
             dif = thisDif;
@@ -74,13 +88,13 @@ return rightC;
 function draw(){
     animationId = window.requestAnimationFrame(draw);
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 5000; i++) {
         var c = randomPoint();
-        var thisColor = ctx.getImageData(c.x, c.y, 1, 1).data;
-        var r = thisColor[0];
-        var g = thisColor[1];
-        var b = thisColor[2];
-        var a = thisColor[3];
+        var thisColorApproximated = approximateColorToPalette(ctx.getImageData(c.x, c.y, 1, 1).data);
+        var r = thisColorApproximated[0];
+        var g = thisColorApproximated[1];
+        var b = thisColorApproximated[2];
+        var a = thisColorApproximated[3];
         new brushStroke(c, randomPoint(), randomRange(5, 25), randomRange(3, 8), `rgba(${r},${g},${b},${a})`);
         //console.log(ctx.getImageData(c.x, c.y, 1, 1).data);
         
