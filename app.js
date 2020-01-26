@@ -7,9 +7,10 @@ var form = document.getElementById("form");
 var startBtn = document.getElementById("start");
 startBtn.classList.add("invisible");
 startBtn.addEventListener("click", vanGoghizeMe);
-
+var animationId;
 var strokes = [];
 
+cvs.addEventListener("click", handleClick);
 
 class brushStroke {
 
@@ -45,7 +46,7 @@ function vanGoghizeMe(e){
 }
 
 function draw(){
-    window.requestAnimationFrame(draw);
+    animationId = window.requestAnimationFrame(draw);
 
     for (let i = 0; i < 50; i++) {
         var c = randomPoint();
@@ -68,6 +69,10 @@ function draw(){
         ctx.fill();
     });
 
+}
+
+function handleClick(){
+    cancelAnimationFrame(animationId);
 }
 
 
