@@ -12,16 +12,27 @@ var strokes = [];
 
 
 class brushStroke {
-    
-constructor(center, dir, w, s, color){
-    this.center = center;
-    this.direction = dir;
-    this.width = w;
-    this.size = s;
-    this.color = color;
-}
+
+    constructor(center, dir, w, s, color){
+        this.center = center;
+        this.direction = dir;
+        this.width = w;
+        this.size = s;
+        this.color = color;
+        strokes.push(this);
+    }
 
     
+
+}
+
+
+function randomPoint() {
+
+    var x = Math.floor(Math.random() * cvs.width);
+    var y = Math.floor(Math.random() * cvs.height);
+    return {x, y};
+
 
 }
 
@@ -29,8 +40,22 @@ function vanGoghizeMe(e){
     e.preventDefault();
 
 
-
+    for (let i = 0; i < 500; i++) {
+        var c = randomPoint();
+        new brushStroke(c, randomPoint(), 3, 6, ctx.getImageData(c.x, c.y, 1, 1).data);
+        
+    }
     
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+
+    strokes.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.center.x, s.center.y, s.width, 0, 2 * Math.PI);
+        ctx.fillStyle = s.color;
+        ctx.fill();
+    });
+    
+
 }
 
 function feedImgObject(e) {
