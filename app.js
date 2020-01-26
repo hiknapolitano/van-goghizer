@@ -33,30 +33,43 @@ function randomPoint() {
     var y = Math.floor(Math.random() * cvs.height);
     return {x, y};
 
+}
 
+function randomRange(min, max){
+    return Math.floor(Math.random() * max + min);
 }
 
 function vanGoghizeMe(e){
     e.preventDefault();
+    draw();
+}
 
+function draw(){
+    window.requestAnimationFrame(draw);
 
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 50; i++) {
         var c = randomPoint();
-        new brushStroke(c, randomPoint(), 3, 6, ctx.getImageData(c.x, c.y, 1, 1).data);
+        var thisColor = ctx.getImageData(c.x, c.y, 1, 1).data;
+        var r = thisColor[0];
+        var g = thisColor[1];
+        var b = thisColor[2];
+        var a = thisColor[3];
+        new brushStroke(c, randomPoint(), randomRange(5, 19), randomRange(4, 14), `rgba(${r},${g},${b},${a})`);
+        //console.log(ctx.getImageData(c.x, c.y, 1, 1).data);
         
     }
-    
-    ctx.clearRect(0,0,cvs.width,cvs.height);
+
+    //ctx.clearRect(0,0,cvs.width,cvs.height);
 
     strokes.forEach(s => {
         ctx.beginPath();
-        ctx.arc(s.center.x, s.center.y, s.width, 0, 2 * Math.PI);
+        ctx.ellipse(s.center.x, s.center.y, s.size/2, s.width/2, 0, 0, randomRange(0, 2 * Math.PI));
         ctx.fillStyle = s.color;
         ctx.fill();
     });
-    
 
 }
+
 
 function feedImgObject(e) {
    
@@ -66,7 +79,9 @@ function feedImgObject(e) {
     selectedImg.src = url;
     selectedImg.onload = function() {
         startBtn.classList.remove("invisible");
-        ctx.drawImage(selectedImg, 0, 0, selectedImg.width, selectedImg.height, 0, 0, cvs.width, cvs.height);
+        cvs.width = selectedImg.width;
+        cvs.height = selectedImg.height;
+        ctx.drawImage(selectedImg, 0, 0, selectedImg.width, selectedImg.height);
 
     }
   }
