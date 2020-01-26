@@ -9,6 +9,7 @@ startBtn.classList.add("invisible");
 startBtn.addEventListener("click", vanGoghizeMe);
 var animationId;
 var strokes = [];
+var vanGoghPalette = []; //[[r,g,b,a], ...]
 
 cvs.addEventListener("click", handleClick);
 
@@ -45,6 +46,31 @@ function vanGoghizeMe(e){
     draw();
 }
 
+function approximateColorToPalette(color){
+var dif = 256 * 4;
+rightC = [];
+
+vanGoghPalette.forEach(cfp => {
+
+    color.forEach(e => {
+        thisDif = 0;
+        dif += Math.abs(e - cfp[0]);
+        dif += Math.abs(e - cfp[1]);
+        dif += Math.abs(e - cfp[2]);
+        dif += Math.abs(e - cfp[3]);
+
+        if(thisDif < dif){
+            dif = thisDif;
+            rightC = cfp;
+        }
+    });
+})
+
+return rightC;
+
+
+}
+
 function draw(){
     animationId = window.requestAnimationFrame(draw);
 
@@ -55,7 +81,7 @@ function draw(){
         var g = thisColor[1];
         var b = thisColor[2];
         var a = thisColor[3];
-        new brushStroke(c, randomPoint(), randomRange(5, 19), randomRange(4, 14), `rgba(${r},${g},${b},${a})`);
+        new brushStroke(c, randomPoint(), randomRange(5, 25), randomRange(3, 8), `rgba(${r},${g},${b},${a})`);
         //console.log(ctx.getImageData(c.x, c.y, 1, 1).data);
         
     }
@@ -73,6 +99,20 @@ function draw(){
 
 function handleClick(){
     cancelAnimationFrame(animationId);
+    setTimeout(() => {
+
+        var dataURL = cvs.toDataURL("image/jpeg", 1.0);
+        downloadImage(dataURL, 'my-canvas.jpeg');
+
+    }, 800);
+}
+
+function downloadImage(data, filename = 'untitled.jpeg') {
+    var a = document.createElement('a');
+    a.href = data;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
 }
 
 
