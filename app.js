@@ -39,6 +39,51 @@ var vanGoghPalette = [
 
 ]; 
 
+var modelImg = new Image();
+modelImg.src = "./model2.jpg";
+
+
+const cvsModel = document.createElement("canvas");
+const ctxModel = cvsModel.getContext("2d");
+
+modelImg.onload = () =>{
+    cvsModel.width = modelImg.width;
+    cvsModel.height = modelImg.height;
+    console.log("canvas model width:" + cvsModel.width);
+    ctxModel.drawImage(modelImg, 0, 0);
+    console.log("model of image loadedddddd");
+
+
+}
+
+  
+
+document.addEventListener("keydown", handleKeyPress);
+
+
+function handleKeyPress(e){
+    if(e.keyCode == 40){
+        loadPaletteFromImage();
+    }
+}
+
+function loadPaletteFromImage(){
+
+    alert("palette will be loaded");
+    vanGoghPalette = [];
+    var scale = 10;
+    for(let x = 0; x<cvsModel.width/scale; x++){
+        for(let y=0; y<cvsModel.height/scale; y++){
+            console.log("x * scale = "+x*scale)
+            vanGoghPalette.push(ctxModel.getImageData(x*scale, y*scale, 1, 1).data)
+        }
+    }
+
+    console.log("loaded successfully");
+    console.log(vanGoghPalette);
+
+}
+
 cvs.addEventListener("click", handleClick);
 
 class brushStroke {
@@ -107,28 +152,42 @@ return  rightC;
 
 }
 
+function pointNoise(c){
+
+return {x: c.x + randomRange(0, 3), y: c.y + randomRange(2, 7)}
+}
+
 var frameCount = 0;
 
 function draw(){
     animationId = window.requestAnimationFrame(draw);
     frameCount++;
     console.log(frameCount);
-    if(frameCount > 60){
+    if(frameCount >= 60){
         cancelAnimationFrame(animationId);
         console.log("chega");
     }
 
-        for (let i = 0; i < 600; i++) {
+        for (let i = 0; i < 220; i++) {
 
             var c = randomPoint();
             //var c = {x: i, y: j};
             var thisColorApproximated = approximateColorToPalette(ctx2.getImageData(c.x, c.y, 1, 1).data);
+            //if(randomRange(0, 2) == 1 ) thisColorApproximated = ctx2.getImageData(c.x, c.y, 1, 1).data;
+            // console.log(thisColorApproximated);
             var r = thisColorApproximated[0];
             var g = thisColorApproximated[1];
             var b = thisColorApproximated[2];
             var a = thisColorApproximated[3];
+            var sWidth = randomRange(1, 3);
+            var sSize = randomRange(8, 18);
+
             // console.log(thisColorApproximated);
-            new brushStroke(c, randomPoint(), randomRange(2, 20), randomRange(2, 7), `rgba(${r},${g},${b},${a/20})`);
+            // new brushStroke(c, randomPoint(), R, r, `rgba(${r},${g},${b},${a})`);
+            new brushStroke(c, randomPoint(), sSize, sWidth, `rgba(${r},${g},${b}, 1)`);
+            new brushStroke(pointNoise(c), randomPoint(), sSize, sWidth, `rgba(${r},${g},${b}, 0.2)`);
+            new brushStroke(pointNoise(c), randomPoint(), sSize, sWidth, `rgba(${r},${g},${b}, 0.2)`);
+            
             //console.log(ctx.getImageData(c.x, c.y, 1, 1).data);
             
         }
@@ -140,7 +199,8 @@ function draw(){
 
     strokes.forEach(s => {
         ctx.beginPath();
-        ctx.ellipse(s.center.x, s.center.y, s.size/2, s.width/2, randomRange(0, Math.PI/3), 0, randomRange(0, 2 * Math.PI));
+        ctx.ellipse(s.center.x, s.center.y, s.size, s.width, randomRange(0, Math.PI/2), 0, 2 * Math.PI);
+        // console.log("s.color = " + s.color);
         ctx.fillStyle = s.color;
         ctx.fill();
     });
