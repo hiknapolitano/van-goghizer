@@ -138,7 +138,7 @@ rightC = [];
 vanGoghPalette.forEach(cfp => {
 
         thisDif = 0;
-        thisDif = colorDifference(color[0], cfp[0], color[1], cfp[1], color[2], cfp[2])
+        thisDif = colorDifference(color[0], color[1], color[2], cfp[0], cfp[1], cfp[2]);
 
         if(thisDif < dif){
             dif = thisDif;
