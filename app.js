@@ -35,12 +35,12 @@ var vanGoghPalette = [
     [157,139,27, 1],
     [141,73,8, 1],
     [101,175,26, 1]
-//TODO: LOAD PALETTE FROM VAN GOGH'S ACTUAL PAINTINGS IN PNG!
+//TODO: try and make brush strokes look more similar to van gogh's style.
 
 ]; 
 
 var modelImg = new Image();
-modelImg.src = "./model2.jpg";
+modelImg.src = "./model.jpg";
 
 
 const cvsModel = document.createElement("canvas");
@@ -71,7 +71,7 @@ function loadPaletteFromImage(){
 
     alert("palette will be loaded");
     vanGoghPalette = [];
-    var scale = 10;
+    var scale = 25;
     for(let x = 0; x<cvsModel.width/scale; x++){
         for(let y=0; y<cvsModel.height/scale; y++){
             console.log("x * scale = "+x*scale)
@@ -168,7 +168,7 @@ function draw(){
         console.log("chega");
     }
 
-        for (let i = 0; i < 220; i++) {
+        for (let i = 0; i < 100; i++) {
 
             var c = randomPoint();
             //var c = {x: i, y: j};
@@ -184,9 +184,11 @@ function draw(){
 
             // console.log(thisColorApproximated);
             // new brushStroke(c, randomPoint(), R, r, `rgba(${r},${g},${b},${a})`);
-            new brushStroke(c, randomPoint(), sSize, sWidth, `rgba(${r},${g},${b}, 1)`);
-            new brushStroke(pointNoise(c), randomPoint(), sSize, sWidth, `rgba(${r},${g},${b}, 0.2)`);
-            new brushStroke(pointNoise(c), randomPoint(), sSize, sWidth, `rgba(${r},${g},${b}, 0.2)`);
+            new brushStroke(c, randomPoint(), sSize*2, sWidth*2, `rgba(${r},${g},${b}, 0.8)`);
+            new brushStroke(pointNoise(c), randomPoint(), sSize/3, sWidth/3, `rgba(${r*0.6},${g*0.6},${b*0.6}, 0.8)`);
+            new brushStroke(pointNoise(c), randomPoint(), sSize/3, sWidth/3, `rgba(${r*0.6},${g*0.6},${b*0.6}, 0.8)`);
+            new brushStroke(pointNoise(c), randomPoint(), sSize/3, sWidth/3, `rgba(${r*0.6},${g*0.6},${b*0.6}, 0.8)`);
+            new brushStroke(pointNoise(c), randomPoint(), sSize/3, sWidth/3, `rgba(${r*0.6},${g*0.6},${b*0.6}, 0.8)`);
             
             //console.log(ctx.getImageData(c.x, c.y, 1, 1).data);
             
